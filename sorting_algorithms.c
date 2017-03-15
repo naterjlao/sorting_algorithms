@@ -1,6 +1,16 @@
 #include <stdio.h>
-#define SELECTIONSORT
+#define BUBBLE_SORT 1
+#define BUBBLE_SORT_MOD 2
+#define INSERTION_SORT 3
+#define SELECTION_SORT 4
+#define MERGE_SORT 5
+#define HEAP_SORT 6
+#define QUICK_SORT 7
+
+/*Change these:*/
+#define SORT_TYPE BUBBLE_SORT
 #define PRINT_STEPS 1
+
 
 /*---------------Sorting Prototypes---------------*/
 void bubblesort (int[], int, int *, int *);
@@ -29,19 +39,19 @@ int main(void) {
 	int num_exch = 0;
 	void (*sort) (int[], int, int *, int *);
 
-#if defined BUBBLESORT
+#if SORT_TYPE == 1
 	sort = bubblesort;
-#elif defined BUBBLESORT_MOD
+#elif defined SORT_TYPE == 2
 	sort = bubblesort_mod;
-#elif defined INSERTIONSORT
+#elif defined SORT_TYPE == 3
 	sort = insertionsort;
-#elif defined SELECTIONSORT
+#elif defined SORT_TYPE == 4
 	sort = selectionsort;
-#elif defined MERGESORT
+#elif defined SORT_TYPE == 5
 	sort = mergesort;
-#elif defined HEAPSORT
+#elif defined SORT_TYPE == 6
 	sort = heapsort;
-#elif defined QUICKSORT
+#elif defined SORT_TYPE == 7
 	sort = quicksort;
 #else
 	sort = nosort;
@@ -312,12 +322,12 @@ void heapsift_down (int heap[], int size, int index, int *num_cmpr, int *num_exc
 	if (index * 2 + 1 < size) {
 		/*If there is a right child and that child is greater than the current and
 		it's sibling, switch*/
-		if () {
+		if (0) { /*TODO*/
 			/*Switch the right child and current*/
 			/*Recursive call*/
 		} 
 		/*If the left child is less than current, do a switch*/
-		else if () {
+		else if (0) { /*TODO*/
 			/*Switch the left child and current*/
 			/*Recursive call*/
 		}
