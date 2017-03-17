@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <stdlib.h>
 #define BUBBLE_SORT 1
 #define BUBBLE_SORT_MOD 2
 #define INSERTION_SORT 3
@@ -8,23 +9,24 @@
 #define QUICK_SORT 7
 
 /*Change these:*/
-#define SORT_TYPE BUBBLE_SORT
+#define SORT_TYPE QUICK_SORT
 #define PRINT_STEPS 1
 
 
 /*---------------Sorting Prototypes---------------*/
-void bubblesort (int[], int, int *, int *);
-void bubblesort_mod (int[], int, int *, int *);
-void insertionsort (int[], int, int *, int *);
-void selectionsort (int[], int, int *, int *);
-void mergesort (int[], int, int *, int *);
-void heapsort (int[], int, int *, int *);
-void quicksort (int[], int, int *, int *);
-void nosort (int[], int, int *, int *);
+void bubble_sort (int[], int, int *, int *);
+void bubble_sort_mod (int[], int, int *, int *);
+void insertion_sort (int[], int, int *, int *);
+void selection_sort (int[], int, int *, int *);
+void merge_sort (int[], int, int *, int *);
+void heap_sort (int[], int, int *, int *);
+void quick_sort (int[], int, int *, int *);
+void no_sort (int[], int, int *, int *);
 
 
 /*---------------Utility Prototypes---------------*/
 void print_int_array (int[], int);
+void print_int_array_s (int[], int);
 int get_smallest (int[], int);
 void switch_int_array (int[], int, int);
 void heapsift_up (int[], int, int, int *, int *);
@@ -40,21 +42,21 @@ int main(void) {
 	void (*sort) (int[], int, int *, int *);
 
 #if SORT_TYPE == 1
-	sort = bubblesort;
-#elif defined SORT_TYPE == 2
-	sort = bubblesort_mod;
-#elif defined SORT_TYPE == 3
-	sort = insertionsort;
-#elif defined SORT_TYPE == 4
-	sort = selectionsort;
-#elif defined SORT_TYPE == 5
-	sort = mergesort;
-#elif defined SORT_TYPE == 6
-	sort = heapsort;
-#elif defined SORT_TYPE == 7
-	sort = quicksort;
+	sort = bubble_sort;
+#elif SORT_TYPE == 2
+	sort = bubble_sort_mod;
+#elif SORT_TYPE == 3
+	sort = insertion_sort;
+#elif SORT_TYPE == 4
+	sort = selection_sort;
+#elif SORT_TYPE == 5
+	sort = merge_sort;
+#elif SORT_TYPE == 6
+	sort = heap_sort;
+#elif SORT_TYPE == 7
+	sort = quick_sort;
 #else
-	sort = nosort;
+	sort = no_sort;
 #endif
 
 	/*Display starting state*/
@@ -76,7 +78,7 @@ int main(void) {
 /*---------------Sorting Functions---------------*/
 
 /*Largest elements 'float' (switches) to the top*/
-void bubblesort (int list[], int size, int *num_cmpr, int *num_exch) {
+void bubble_sort (int list[], int size, int *num_cmpr, int *num_exch) {
 	int i, j, temp;
 	printf("<< Performing Bubblesort >>\n");
 	for (i = size - 1; i >= 1; i--) {
@@ -94,7 +96,7 @@ void bubblesort (int list[], int size, int *num_cmpr, int *num_exch) {
 
 /*Performs the bubblesort but reduces the amount of comparisons needed
 by ignoring the end part of the list the algorithm knows it's sorted*/
-void bubblesort_mod (int list[], int size, int *num_cmpr, int *num_exch) {
+void bubble_sort_mod (int list[], int size, int *num_cmpr, int *num_exch) {
 	int i, j, t, temp;
 	printf("<< Performing Bubblesort (Modified)>>\n");
 	i = size - 2;
@@ -114,7 +116,7 @@ void bubblesort_mod (int list[], int size, int *num_cmpr, int *num_exch) {
 }
 
 /*Takes in a element one at a time and sorts within the list*/
-void insertionsort (int list[], int size, int *num_cmpr, int *num_exch) {
+void insertion_sort (int list[], int size, int *num_cmpr, int *num_exch) {
 	int i, j, t;
 	int t_list [size + 1];
 	printf("<< Performing Insertion Sort >>\n");
@@ -144,7 +146,7 @@ void insertionsort (int list[], int size, int *num_cmpr, int *num_exch) {
 }
 
 /*Picks biggest element and switches with the top*/
-void selectionsort (int list[], int size, int *num_cmpr, int *num_exch) {
+void selection_sort (int list[], int size, int *num_cmpr, int *num_exch) {
 	int i, j, k, temp;
 	printf("<< Performing Selection Sort >>\n");
 
@@ -164,7 +166,7 @@ void selectionsort (int list[], int size, int *num_cmpr, int *num_exch) {
 
 /*Recursive algorithm - splits the list into two parts, sort the parts and
 combine together in order*/
-void mergesort (int list[], int size, int *num_cmpr, int *num_exch) {
+void merge_sort (int list[], int size, int *num_cmpr, int *num_exch) {
 	if (size > 1) {
 		/*split the array into two parts - if the original list is odd, the back list will
 		have 1 more element*/
@@ -187,8 +189,8 @@ void mergesort (int list[], int size, int *num_cmpr, int *num_exch) {
 #endif
 
 		/*call the function on the parts recursively - will sort the list*/
-		mergesort(front, size / 2, num_cmpr, num_exch);
-		mergesort(back, size / 2 + size % 2, num_cmpr, num_exch);
+		merge_sort(front, size / 2, num_cmpr, num_exch);
+		merge_sort(back, size / 2 + size % 2, num_cmpr, num_exch);
 
 		/*merge the parts together*/
 		j = 0;	/*points at the first element of the front list*/
@@ -248,16 +250,51 @@ void mergesort (int list[], int size, int *num_cmpr, int *num_exch) {
 
 /*Performs a heap sort on the list. There are two phases: creating the heap
 and popping elements from a list. Does need to allocate memory.*/
-void heapsort (int list[], int size, int *num_cmpr, int *num_exch) {
-	makeheap(list, size, num_cmpr, num_exch);
+void heap_sort (int list[], int size, int *num_cmpr, int *num_exch) {
+	int i, *heap;
+
+	heap = makeheap(list, size, num_cmpr, num_exch); /*Make the heap*/
+	for (i = 0; i < size; i++) {
+		list[size - i - 1] = heap[0]; /*Get the top element of the heap*/
+		heap[0] = heap[size - i - 1]; /*Push the bottom element to the top of the heap*/
+
+#if PRINT_STEPS
+		printf("Performing Down Sift - Before --> ");
+		print_int_array_s(heap, size - i - 1);
+#endif
+		heapsift_down(heap, size - i - 1, 0, num_cmpr, num_exch); /*Reorder the heap*/
+
+#if PRINT_STEPS
+		printf(" After --> ");
+		print_int_array_s(heap, size - i - 1);
+		printf("\n");
+#endif
+	}
 }
 
-void quicksort (int list[], int size, int *num_cmpr, int *num_exch) {
-	/*TODO*/
+/*Pick the element in the middle of the list. Push the lesser element to left of the
+middle element and push the greater elements to the right. Recurse with the left and right
+partitions*/
+void quick_sort (int list[], int size, int *num_cmpr, int *num_exch) {
+	int i, m, temp;
+	m = size/2;	/*Get the middle index*/
+
+	while (i < size) {
+		/*If the current element is greater than the middle element and it exists on the left side, 
+		push the elements to the right of it up to the middle element to the left and place the current
+		element at the middle spot. Update m index but do not update current index i*/
+		if (i < m && list[i] > list[m]) {
+			/*TODO*/
+		} else if (i > m && list[i] < list[m]) {
+			/*TODO*/
+		} else {
+			i++;
+		}
+	}
 }
 
 /*Does not do anything*/
-void nosort (int list[], int size, int *num_cmpr, int *num_exch) {
+void no_sort (int list[], int size, int *num_cmpr, int *num_exch) {
 	printf("<< No Sort Performed >>\n");
 }
 
@@ -266,12 +303,17 @@ void nosort (int list[], int size, int *num_cmpr, int *num_exch) {
 
 /*Prints the array of ints*/
 void print_int_array (int list[], int size) {
+	print_int_array_s(list, size);
+	printf("\n");
+}
+
+/*Prints the array of ints (w/o newline)*/
+void print_int_array_s (int list[], int size) {
 	int *list_p = list;
 	while ((list_p - list) < size) {
 		printf("%d ", *list_p);
 		list_p++;
 	}
-	printf("\n");
 }
 
 /*Returns the smallest element*/
@@ -322,17 +364,27 @@ void heapsift_down (int heap[], int size, int index, int *num_cmpr, int *num_exc
 	if (index * 2 + 1 < size) {
 		/*If there is a right child and that child is greater than the current and
 		it's sibling, switch*/
-		if (0) { /*TODO*/
+		if (index * 2 + 2 < size &&
+		        heap[index * 2 + 2] > heap[index * 2 + 1] &&
+		        heap[index * 2 + 2] > heap[index]) {
+			(*num_cmpr)++;
+
 			/*Switch the right child and current*/
+			switch_int_array(heap, index, index * 2 + 2);
+
 			/*Recursive call*/
-		} 
-		/*If the left child is less than current, do a switch*/
-		else if (0) { /*TODO*/
+			heapsift_down(heap, size, index * 2 + 2, num_cmpr, num_exch);
+		}
+		/*If the left child is greater than the parent, do a switch*/
+		else if ((*num_cmpr)++, heap[index * 2 + 1] > heap[index]) {
+
 			/*Switch the left child and current*/
+			switch_int_array(heap, index, index * 2 + 1);
+
 			/*Recursive call*/
+			heapsift_down(heap, size, index * 2 + 1, num_cmpr, num_exch);
 		}
 	}
-
 }
 
 /*Allocates and create a heap based on the elements of the given array
@@ -346,11 +398,29 @@ left child -> 2i + 1
 right child -> 2i + 2
 parent -> floor{(i-1)/2}*/
 int* makeheap (int list[], int size, int *num_cmpr, int *num_exch) {
-	int i, heap[size];
+	int i, *heap;
+	heap = malloc(size * sizeof(int));
 
+#if PRINT_STEPS
+	printf ("<< Making Heap >>\n");
+#endif
+
+	/*Forming the heap*/
 	for (i = 0; i < size; i++) {
 		heap[i] = list[i];
+
+#if PRINT_STEPS
+		printf("Performing Up Sift - Before --> ");
+		print_int_array_s(heap, i + 1);
+#endif
+
 		heapsift_up(heap, size, i, num_cmpr, num_exch);
+
+#if PRINT_STEPS
+		printf(" After --> ");
+		print_int_array_s(heap, i + 1);
+		printf("\n");
+#endif
 	}
 
 #if PRINT_STEPS
@@ -358,7 +428,7 @@ int* makeheap (int list[], int size, int *num_cmpr, int *num_exch) {
 	print_int_array(heap, size);
 #endif
 
-	return NULL;
+	return heap;
 }
 
 
