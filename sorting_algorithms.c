@@ -1,80 +1,14 @@
 #include <stdio.h>
 #include <stdlib.h>
-#define BUBBLE_SORT 1
-#define BUBBLE_SORT_MOD 2
-#define INSERTION_SORT 3
-#define SELECTION_SORT 4
-#define MERGE_SORT 5
-#define HEAP_SORT 6
-#define QUICK_SORT 7
+#include "sorting_algorithms.h"
 
-/*Change these:*/
-#define SORT_TYPE QUICK_SORT
-#define PRINT_STEPS 1
-
-
-/*---------------Sorting Prototypes---------------*/
-void bubble_sort (int[], int, int *, int *);
-void bubble_sort_mod (int[], int, int *, int *);
-void insertion_sort (int[], int, int *, int *);
-void selection_sort (int[], int, int *, int *);
-void merge_sort (int[], int, int *, int *);
-void heap_sort (int[], int, int *, int *);
-void quick_sort (int[], int, int *, int *);
-void no_sort (int[], int, int *, int *);
-
-
-/*---------------Utility Prototypes---------------*/
-void print_int_array (int[], int);
-void print_int_array_s (int[], int);
+/*---------------Private Utility Prototypes---------------*/
 int get_smallest (int[], int);
 void switch_int_array (int[], int, int);
 void heapsift_up (int[], int, int, int *, int *);
 void heapsift_down (int[], int, int, int *, int *);
 int* makeheap (int[], int, int *, int *);
 void quick_sort_aux (int[], int, int, int *, int *);
-
-/*---------------MAIN DRIVER---------------*/
-int main(void) {
-	int list[] = {4, 10, 6, 1, 9, 5, 2, 3, 8, 7};
-	int size = sizeof(list) / sizeof(int);
-	int num_cmpr = 0;
-	int num_exch = 0;
-	void (*sort) (int[], int, int *, int *);
-
-#if SORT_TYPE == 1
-	sort = bubble_sort;
-#elif SORT_TYPE == 2
-	sort = bubble_sort_mod;
-#elif SORT_TYPE == 3
-	sort = insertion_sort;
-#elif SORT_TYPE == 4
-	sort = selection_sort;
-#elif SORT_TYPE == 5
-	sort = merge_sort;
-#elif SORT_TYPE == 6
-	sort = heap_sort;
-#elif SORT_TYPE == 7
-	sort = quick_sort;
-#else
-	sort = no_sort;
-#endif
-
-	/*Display starting state*/
-	printf("Before:\n");
-	print_int_array(list, size);
-
-	/*Perform the sort*/
-	sort(list, size, &num_cmpr, &num_exch);
-
-	/*Display results*/
-	printf("After:\n");
-	print_int_array(list, size);
-	printf("Number of Comprisons: %d\nNumber of Exchanges: %d\n",
-	       num_cmpr, num_exch);
-
-	return 0;
-}
 
 /*---------------Sorting Functions---------------*/
 
@@ -271,6 +205,8 @@ void heap_sort (int list[], int size, int *num_cmpr, int *num_exch) {
 		printf("\n");
 #endif
 	}
+
+	free(heap);
 }
 
 /*Pick the element in the middle of the list. Push the lesser element to left of the
