@@ -32,10 +32,11 @@ void switch_int_array (int[], int, int);
 void heapsift_up (int[], int, int, int *, int *);
 void heapsift_down (int[], int, int, int *, int *);
 int* makeheap (int[], int, int *, int *);
+void quick_sort_aux (int[], int, int, int *, int *);
 
 /*---------------MAIN DRIVER---------------*/
 int main(void) {
-	int list[] = {4, 5, 6, 1, 9, 10, 2, 3, 8, 7};
+	int list[] = {4, 10, 6, 1, 9, 5, 2, 3, 8, 7};
 	int size = sizeof(list) / sizeof(int);
 	int num_cmpr = 0;
 	int num_exch = 0;
@@ -276,21 +277,7 @@ void heap_sort (int list[], int size, int *num_cmpr, int *num_exch) {
 middle element and push the greater elements to the right. Recurse with the left and right
 partitions*/
 void quick_sort (int list[], int size, int *num_cmpr, int *num_exch) {
-	int i, m, temp;
-	m = size/2;	/*Get the middle index*/
-
-	while (i < size) {
-		/*If the current element is greater than the middle element and it exists on the left side, 
-		push the elements to the right of it up to the middle element to the left and place the current
-		element at the middle spot. Update m index but do not update current index i*/
-		if (i < m && list[i] > list[m]) {
-			/*TODO*/
-		} else if (i > m && list[i] < list[m]) {
-			/*TODO*/
-		} else {
-			i++;
-		}
-	}
+	quick_sort_aux(list, 0, size - 1, num_cmpr, num_exch);
 }
 
 /*Does not do anything*/
@@ -429,6 +416,54 @@ int* makeheap (int list[], int size, int *num_cmpr, int *num_exch) {
 #endif
 
 	return heap;
+}
+
+/*Performs a quicksort on the specified int array. Note that the start and end values are inclusive.
+The size of the list is determined by the expression end - start + 1*/
+void quick_sort_aux (int list[], int start, int end, int *num_cmpr, int *num_exch) {
+	int i, j, m, temp, size;
+	i = start;
+	size = end - start + 1;
+	m = (start + end + 1)/2;	/*Get the middle index*/
+
+#if defined PRINT_STEPS
+	printf("Performing Mergesort: Median = %d --> ", list[m]);
+	print_int_array(&list[start], size);
+#endif
+
+	/*If the current element is greater than the middle element and it exists on the left side,
+		push the elements to the right of it up to the middle element to the left and place the current
+		element at the middle spot. Update m index but do not update current index i. (Vice versa if
+		the element is less than the middle but to the right of the middle*/
+	while (i <= end) {
+		j = i; /*Index of the current element*/
+		if ((*num_cmpr)++, i < m && list[i] > list[m]) {
+			(*num_exch)++; /*Will count movement as 1 exchange*/
+			while (j < m) { /*Push the current element to the middle's place*/
+				switch_int_array(list, j, j + 1);
+				j++;
+			}
+			m--; /*Move the middle index accordingly*/
+		} else if ((*num_cmpr)++, i > m && list[i] < list[m]) {
+			(*num_exch)++; /*Will count movement as 1 exchange*/
+			while (j > m) {
+				switch_int_array(list, j, j - 1);
+				j--;
+			}
+			m++;
+		} else {
+			i++;
+		}
+	}
+
+#if defined PRINT_STEPS
+	printf("Result --> ");
+	print_int_array(&list[start], size);
+#endif
+
+	/*Recursive calls on the left and right side of the median*/
+	if (m - 1 > start) quick_sort_aux(list, start, m - 1, num_cmpr, num_exch);
+	if (m + 1 < end) quick_sort_aux(list, m + 1, end, num_cmpr, num_exch);
 }
 
 
