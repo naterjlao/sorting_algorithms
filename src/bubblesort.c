@@ -2,7 +2,12 @@
 #include <stdlib.h>
 #include <string.h>
 #include "bubblesort.h"
+#include "analysis.h"
 
+#if ANALYSIS
+extern unsigned int ncompares;
+extern unsigned int nmoves;
+#endif
 
 /* Performs an in-place bubble sort to the list
  * Params:
@@ -38,17 +43,20 @@ int bubblesort(void *list, size_t length, size_t size, int (*compare)(void *, vo
 
 			displacement = i * size;
 			// if a pair is found, swap
+			COMPARE();
 			if ((!decreasing && 0 < compare(list+displacement,list+displacement+size)) 
 				|| (decreasing && 0 > compare(list+displacement,list+displacement+size))) {
 				sorted = 0;														// the array is found to be unsorted
 				memcpy(buffer,(list+displacement),size);						// push first element to buffer
 				memcpy((list+displacement),(list+displacement+size),size);		// push second element to first element
 				memcpy((list+displacement+size),buffer,size);					// push buffer to second element
+				SWAP();
 			}
 
 			i++;
 		}	
 	}
 
+	ANALYZE();
 	return status;
 }

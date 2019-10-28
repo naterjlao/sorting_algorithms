@@ -3,6 +3,12 @@
 #include "bubblesort.h"
 #include "mergesort.h"
 #include "quicksort.h"
+#include "analysis.h"
+
+#if ANALYSIS
+extern unsigned int ncompares = 0;
+extern unsigned int nmoves = 0;
+#endif
 
 int int_compare(void *a_ptr, void *b_ptr) {
 	// cast to int
@@ -30,8 +36,10 @@ int main() {
 	print_int_array(&arr[0],10);
 	bubblesort(arr,10,sizeof(int),int_compare,0);
 	print_int_array(&arr[0],10);
+	ANALYZE();
 	bubblesort(arr,10,sizeof(int),int_compare,1);
 	print_int_array(&arr[0],10);
+	ANALYZE();
 
 	return status;
 }
