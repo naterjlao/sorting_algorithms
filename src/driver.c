@@ -1,6 +1,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "bubblesort.h"
+#include "mergesort.h"
+#include "quicksort.h"
 
 int int_compare(void *a_ptr, void *b_ptr) {
 	// cast to int

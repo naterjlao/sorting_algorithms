@@ -2,6 +2,8 @@
 #include <stdlib.h>
 #include <string.h>
 #include "bubblesort.h"
+#include "mergesort.h"
+#include "quicksort.h"
 
 #define LENGTH 5
 #define MAX_STRING_SIZE 40
