@@ -1,8 +1,9 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 #include "quicksort.h"
 
-
+/*
 void swap(void *a, void *b, size_t size) {
 	void *buffer = malloc(size);
 
@@ -12,7 +13,7 @@ void swap(void *a, void *b, size_t size) {
 
 	free(buffer);
 }
-
+*/
 
 /* Quicksort Algorithm
  * - Pick a pivot point (first, last or random element, best case: average value element)
@@ -21,40 +22,57 @@ void swap(void *a, void *b, size_t size) {
  * - Base case: where the list has one or zero elements
  */
 int quicksort(void *list, size_t length, size_t size, int (*compare)(void *, void *), int decreasing) {
-	int status = 0;
+
+	int status_l, status_r;
+	size_t i, lbuf_i, rbuf_i;
 
 	// base case
 	if (length <= 1)
-		goto done;
+		return 0;
 
 	// recursive case
 	// retrieve the last element's value
 	void *pivot = malloc(size);
-	malloc(pivot, (list + (size*(length-1))), size);
+	memcpy(pivot, (list + (size*(length-1))), size);
 
-	// create a buffer array for all greater values
-	size_t buf_i = 0;
-	void *buffer = malloc(length * size);
+	// create a buffer array for left and right side values
+	lbuf_i = 0;
+	rbuf_i = 0;
+	void *lbuffer = malloc(length * size);
+	void *rbuffer = malloc(length * size);
 
-	// iterate through the list, push all greater values in buffer and shift array as needed
-	size_t i = 0;
-	while (i < length - 1) {
-		if (compare((list + (size*i)),pivot) > 0) {
-			memcpy((buffer + (size*buf_i)),(list + (size*i)),size);
-			buffer_i++;
-			// TODO shift array backwards
+	// iterate through the list, push values into left or right buffer
+	i = 0;
+	while (i < length) {
+		if (!decreasing && compare((list + (size*i)),pivot) > 0
+		   ||decreasing && compare((list + (size*i)),pivot) < 0) {
+			// greater values
+			memcpy((rbuffer + (size * rbuf_i)),(list + (size * i)),size);
+			rbuf_i++;
+		} else {
+			// lesser or equal values
+			memcpy((lbuffer + (size * lbuf_i)),(list + (size * i)),size);
+			lbuf_i++;
 		}
 		i++;
 	}
 
-	// copy over the buffer to the back of the pivot
-	// TODO
 
-done:
+	// copy over the buffers
+	memcpy(list, lbuffer, size * lbuf_i);
+	memcpy((list + (size * lbuf_i)), rbuffer, size * rbuf_i);
+
+	// cleanup
 	if (pivot)
 		free(pivot);
-	if (buffer)
-		free(buffer);
-	return status;
+	if (lbuffer)
+		free(lbuffer);
+	if (rbuffer)
+		free(rbuffer);
+
+	status_l = quicksort(list, (lbuf_i-1), size, compare, decreasing);
+	status_r = quicksort(list + (size * lbuf_i), rbuf_i, size, compare, decreasing);
+
+	return status_l == 0 ? status_r : status_l;
 }
 
