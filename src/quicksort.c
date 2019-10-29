@@ -3,18 +3,6 @@
 #include <string.h>
 #include "quicksort.h"
 
-/*
-void swap(void *a, void *b, size_t size) {
-	void *buffer = malloc(size);
-
-	memcpy(buffer,a,size);
-	memcpy(a,b,size);
-	memcpy(b,buffer,size);
-
-	free(buffer);
-}
-*/
-
 /* Quicksort Algorithm
  * - Pick a pivot point (first, last or random element, best case: average value element)
  * - Partition the array based on pivot (lesser values before and vice versa)

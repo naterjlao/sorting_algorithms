@@ -4,7 +4,9 @@
 #include "bubblesort.h"
 #include "mergesort.h"
 #include "quicksort.h"
+#include "analysis.h"
 
+#define SORT mergesort
 #define LENGTH 5
 #define MAX_STRING_SIZE 40
 
@@ -36,9 +38,9 @@ int main() {
 	};
 
 	print_string_array(&arr[0][0],LENGTH);
-	bubblesort(arr,LENGTH,MAX_STRING_SIZE,strcmp_wrapper,0);
+	SORT(arr,LENGTH,MAX_STRING_SIZE,strcmp_wrapper,0);
 	print_string_array(&arr[0][0],LENGTH);	
-	bubblesort(arr,LENGTH,MAX_STRING_SIZE,strcmp_wrapper,1);
+	SORT(arr,LENGTH,MAX_STRING_SIZE,strcmp_wrapper,1);
 	print_string_array(&arr[0][0],LENGTH);	
 
 	return status;

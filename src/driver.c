@@ -10,6 +10,8 @@ extern unsigned int ncompares = 0;
 extern unsigned int nmoves = 0;
 #endif
 
+#define SORT mergesort
+
 int int_compare(void *a_ptr, void *b_ptr) {
 	// cast to int
 	int a = *((int *) a_ptr);
@@ -34,10 +36,10 @@ int main() {
 	int arr[] = {6,3,4,7,8,5,1,0,2,9};
 
 	print_int_array(&arr[0],10);
-	bubblesort(arr,10,sizeof(int),int_compare,0);
+	SORT(arr,10,sizeof(int),int_compare,0);
 	print_int_array(&arr[0],10);
 	ANALYZE();
-	bubblesort(arr,10,sizeof(int),int_compare,1);
+	SORT(arr,10,sizeof(int),int_compare,1);
 	print_int_array(&arr[0],10);
 	ANALYZE();
 
